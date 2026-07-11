@@ -18,6 +18,9 @@ classifiers = [
   "Programming Language :: Python :: 3.11",
   "License :: OSI Approved :: MIT License",
 ]
+dependencies = [
+  "playwright>=1.50,<2",
+]
 
 [project.scripts]
 course-sniper = "ecupl_course_sniper.cli:main"
@@ -31,4 +34,3 @@ target-version = "py311"
 
 [tool.ruff.lint]
 select = ["E", "F", "I", "UP", "B"]
-

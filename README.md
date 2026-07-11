@@ -1,17 +1,57 @@
 # ECUPL Course Sniper
 
-## 没有人比我更懂抢课
-一个正在制作的华政抢课脚本
+一个通过可见浏览器页面运行的课程余量监测与选课工具，同时保留本地模拟器。
+登录由用户在浏览器中完成，程序不保存账号密码，也不处理或绕过验证码。
 
-## 没有人比我更懂Vibe Coding
-- 本脚本完全由20刀的Codex制作。
-- 没有Gemini 3.5Pro ,我们吃什么?
+## 浏览器模式
+
+安装：
+
+```bash
+python3 -m venv .venv
+source .venv/bin/activate
+pip install -e .
+playwright install chromium
+```
+
+启动可视化界面：
+
+```bash
+course-sniper gui
+```
+
+依次点击“打开并登录”、“扫描课程”，在列表中多选目标课程，然后设置检查间隔并启动。
+界面允许 `0.001–10` 秒的调度间隔；真实页面网络刷新最多每秒一次，防止教务系统限流，
+其余快速周期用于检查当前页面状态。
+
+先以只监测模式运行：
+
+```bash
+course-sniper browser
+```
+
+浏览器打开后手动登录，进入课程列表并设置筛选条件；回到终端按回车，程序会列出
+检测到的课程，输入编号即可自行选择目标课程。确认页面适配正确后启用自动提交：
+
+```bash
+course-sniper browser --submit --interval 8
+```
+
+登录状态保存在被 `.gitignore` 排除的 `data/browser-profile/` 中。若页面无法识别，运行：
+
+```bash
+course-sniper inspect
+```
+
+该命令会把当前页面可见文本保存至 `data/page-text.txt`，用于调整页面选择器。
 
 ## 已实现
 
 - 课程及提交结果的数据模型
 - 可替换的 `CourseGateway` 接口
 - 本地 `InMemoryGateway` 课程与席位模拟器
+- 浏览器内交互选择目标课程
+- 课程余量轮询和显式启用的自动提交
 - 发现余量后执行一次提交的核心引擎
 - 默认开启的 dry-run（只报告、不占位）
 - 同一学生与课程的幂等保护
@@ -74,4 +114,3 @@ PYTHONPATH=src python3 -m ecupl_course_sniper demo --allow-submit
 ## License
 
 [MIT](LICENSE)
-
